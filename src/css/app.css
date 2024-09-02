@@ -1,0 +1,18 @@
+/* Your app custom styles here */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.toastStyle {
+  background-color: #fcc4c4;
+  border: 1px solid #f54242;
+  border-radius: 8px;
+  padding: 5px;
+  color: #f54242;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
