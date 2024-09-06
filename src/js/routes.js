@@ -9,6 +9,7 @@ import RegisterFarmFormPage from '../pages/registerFarmForm.jsx';
 import ReviewRegistrationPage from '../pages/reviewRegistration.jsx';
 import RegistrationCompletePage from '../pages/registrationComplete.jsx';
 import ConnectFarmerPage from '../pages/connectFarmer.jsx';
+import VerifyFarmerPage from '../pages/verifyFarmer.jsx';
 import ReviewFarmerConnectionPage from '../pages/reviewFarmerConnection.jsx';
 import EditRegisterFarmerFormPage from '../pages/editFarmerDetails.jsx';
 import EditRegisterFarmFormPage from '../pages/editFarmDetails.jsx';
@@ -58,6 +59,10 @@ var routes = [
   {
     path: '/editFarmRegistration/',
     component: EditRegisterFarmFormPage,
+  },
+  {
+    path: '/verifyFarmer/',
+    component: VerifyFarmerPage,
   },
   {
     path: '/connectFarmer/',
