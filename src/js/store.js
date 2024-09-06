@@ -23,7 +23,7 @@ const store = createStore({
       return state.user;
     },
     farmerName({ state }) {
-      return state?.farmer?.name || 'Farmer name unset';
+      return `${state?.farmer?.firstname} ${state?.farmer?.lastname}` || 'Farmer name unset';
     },
     farmerData({ state }) {
       return state?.farmer;
