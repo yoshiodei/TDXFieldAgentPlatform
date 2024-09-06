@@ -9,15 +9,9 @@ import store from '../js/store';
 const ReviewFarmerConnectionPage = ({ f7router }) => {
     const [farmerData, setFarmerData] = useState(store.getters.connectFarmer.value);
 
-    // useEffect(() => {  
-    //   setFarmerData(store.getters.connectFarmer.value);  
-    // }, [])
-
     const handleClick = () => {
       f7router.navigate('/registrationComplete/');
     } 
-
-    console.log('value 1234567', farmerData);
 
     return (
         <Page name="welcome">
