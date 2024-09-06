@@ -20,8 +20,8 @@ import {
 
  const HomePage = ({ f7router }) => {
   const handleNavigate = () => {
-    f7router.navigate('/login/');
-    // f7router.navigate('/welcome/');
+    // f7router.navigate('/login/');
+    f7router.navigate('/verifyFarmer/');
   }
 
   return (
