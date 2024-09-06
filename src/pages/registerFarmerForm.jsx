@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaChevronLeft } from "react-icons/fa6"
 import { FaUser } from "react-icons/fa";
+import axios from 'axios';
 import {
     Page,
     f7,
@@ -10,16 +11,48 @@ import PageTitle from '../components/pageTitle';
 import ErrorMessage from '../components/errorMessage';
 import store from '../js/store';
 import useToast from '../components/toast';
+import { regionsArray } from '../config';
 
 const registerFarmerFormPage = ({f7router}) => {
   const initialState = {
-    name: '',
+    firstname: '',
+    lastname: '',
+    community: '',
+    mobilenumber: '',
+    network: 'MTN',
     gender: 'male',
-    phone: '',
-    yearOfBirth: '2024',
-    yearsOfExperience: 'less than 5 years',
+    experience_year: '2024',
+    idcardtype: '',
+    idcardnumber: '',
   }
+
   const [farmerData, setFarmerData] = useState(initialState);
+  const [locationsArray, setLocationsArray] = useState([]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.post(
+          `https://torux.app/api/user/communities/${store.state.user.token}`,
+          {}, // This is the request body, currently empty
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${store.state.user.access_token}`,
+            },
+          }
+        );
+
+        const locationData = response.data
+        setLocationsArray(locationData);
+        setFarmerData({ ...farmerData, community: `${locationData[0].id}, ${locationData[0].name}, ${locationData[0].location}, ${regionsArray[(locationData[0].region - 1)]}` });
+      } catch (error) {
+        console.error('Error fetching commodities:', error);
+      }
+    };
+    
+    fetchLocations();
+  }, []);
 
   const showToast = useToast();
   
@@ -34,20 +67,21 @@ const registerFarmerFormPage = ({f7router}) => {
 
   const handleChangeForm = (e) => {
     const { value, name } = e.target;
-    setFarmerData({...farmerData, [name]: value});
+    setFarmerData({ ...farmerData, [name]: value });
   } 
 
   const validateFarmerData = (farmerData) => {
-    const {name, phone} = farmerData;
+    const {firstname, lastname, mobilenumber, idcardtype, idcardnumber } = farmerData;
 
-    if( name.trim().length === 0 || phone.trim().length === 0){
+    if( !firstname.trim() || !lastname.trim() || !mobilenumber.trim()){
       console.log('error: Fields cannot be empty');
       showToast('Form incomplete');
       return {
         valid: false
       }
     }
-    if(phone.trim().length < 10){
+
+    if(mobilenumber.trim().length !== 10){
       console.log('error: Phone number is too short');
       showToast('Form incomplete');
       return {
@@ -55,18 +89,61 @@ const registerFarmerFormPage = ({f7router}) => {
       }  
     }
 
+    if((!idcardnumber && idcardtype) || (idcardnumber && !idcardtype)){
+      console.log('error: Fields cannot be empty');
+      showToast('Optional field half filled');
+      return {
+        valid: false
+      }
+    }
+
     return { 
       valid: true
     }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const {valid} = validateFarmerData(farmerData);
-    if(valid){
-      store.dispatch('setFarmer', farmerData)
-      f7router.navigate('/registerFarmForm/');
+  const farmerExists = async (phone) => {  
+    try {
+      const response = await axios.post(
+        `https://torux.app/api/user/findfarmer/${store.state.user.token}`,
+        { find: phone }, // This is the request body, currently empty
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.user.access_token}`,
+          },
+        }
+      );
+      const farmerInfo = response.data;
+      return farmerInfo;
+    } catch (error) {
+      console.error('Error fetching farmer:', error.response.data);
+      return { 
+           error: true,
+           message: "Error fetching farmer"
+        }
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const farmerList = await farmerExists(farmerData.mobilenumber);
+
+    if(farmerList?.token){
+      showToast('Farmer already exist');
+      f7router.navigate('/welcome/');
+    }
+
+    if(farmerList?.error){
+      const {valid} = validateFarmerData(farmerData);
+
+      if(valid){
+        store.dispatch('setFarmer', farmerData);
+        f7router.navigate('/registerFarmForm/');
+      }
+    }
+
   }
 
   return (
@@ -93,13 +170,42 @@ const registerFarmerFormPage = ({f7router}) => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-y-3">  
             <div className="flex flex-col">
-                <label className="font-semibold">Name</label>
+                <label className="font-semibold">First Name</label>
                 <input
-                  name="name"
+                  name="firstname"
                   onChange={handleChangeForm}
                   placeholder="Please enter name"
                   className="border border-slate-200 w-full h-[2.8em] px-3 rounded"
                 />
+            </div>
+            <div className="flex flex-col">
+              <label className="font-semibold">Last Name</label>
+              <input
+                name="lastname"
+                onChange={handleChangeForm}
+                placeholder="Please enter name"
+                className="border border-slate-200 w-full h-[2.8em] px-3 rounded"
+              />
+            </div>
+            <div>
+              <label className="font-semibold">Community</label>
+              <div className="w-full rounded border border-slate-200 overflow-hidden">
+                <select
+                  className="bg-white w-full h-[2.8em] px-3"
+                  name="community"
+                  onChange={handleChangeForm}
+                >
+                  {locationsArray.map((item) => (
+                    <option
+                      value={`${item?.id}, ${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
+                      key={item?.id}
+                    >
+                      {`${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
+                    </option>
+                  )
+                )}
+                </select>
+              </div>    
             </div>
             <div className="flex flex-col">
                 <label className="font-semibold">Gender</label>
@@ -114,10 +220,24 @@ const registerFarmerFormPage = ({f7router}) => {
                 </div>    
             </div>
             <div className="flex flex-col">
+                <label className="font-semibold">Mobile Network</label>
+                <div className="w-full rounded border border-slate-200 overflow-hidden">
+                  <select 
+                    name="network"
+                    className="bg-white w-full h-[2.8em] px-3"
+                    onChange={handleChangeForm}
+                  >
+                    <option value="MTN">MTN</option>
+                    <option value="Telecel">Telecel</option>
+                    <option value="AirtelTigo">AirtelTigo</option>
+                  </select> 
+                </div>
+            </div>
+            <div className="flex flex-col">
                 <label className="font-semibold">Phone Number</label>
                 <div className="w-auto h-auto border border-slate-200 rounded px-3">
                 <input 
-                    name="phone"
+                    name="mobilenumber"
                     onChange={handleChangeForm}
                     placeholder="Please enter mobile number"
                     type="number"
@@ -126,31 +246,44 @@ const registerFarmerFormPage = ({f7router}) => {
                 </div>
             </div>
             <div className="flex flex-col">
-                <label className="font-semibold">Year of Birth</label>
+                <label className="font-semibold">Year Began</label>
                 <div className="w-full rounded border border-slate-200 overflow-hidden">
-                <select 
-                  name="yearOfBirth"
+                <select
+                  name="experience_year"
                   onChange={handleChangeForm}
                   className="bg-white w-full h-[2.8em] px-3">
-                    {
-                    getYearArray().map((item) => (
-                        <option key={item} value={item}>{item}</option>
-                    ))
+                     {
+                       getYearArray().map((item) => (
+                         <option key={item} value={item}>{item}</option>
+                       ))
                     }
                 </select> 
                 </div>
             </div>
             <div className="flex flex-col">
-                <label className="font-semibold">Years of Experience</label>
+                <label className="font-semibold">ID Card Type (Optional)</label>
                 <div className="w-full rounded border border-slate-200 overflow-hidden">
                 <select
-                  name="yearsOfExperience"
+                  name="idcardtype"
                   onChange={handleChangeForm}
-                  className="bg-white w-full h-[2.8em] px-3">
-                    <option value="less than 5 years">Less than 5 years</option>
-                    <option value="5 - 10 years">5 - 10 years</option>
-                    <option value="more than 10 years">More than 10 years</option>
+                  className="bg-white w-full h-[2.8em] px-3"
+                >
+                  <option value="">No Card Selected</option>     
+                  <option value="ghana card">Ghana Card</option>     
+                  <option value="voters">Voters' ID</option>     
                 </select> 
+                </div>
+            </div>
+            <div className="flex flex-col">
+                <label className="font-semibold">ID Card Number (Optional)</label>
+                <div className="w-auto h-auto border border-slate-200 rounded px-3">
+                <input 
+                    name="idcardnumber"
+                    onChange={handleChangeForm}
+                    placeholder="Please enter mobile number"
+                    type="number"
+                    className="w-full h-[2.8em]"
+                />
                 </div>
             </div>
           </div>
