@@ -22,6 +22,7 @@ export default function FarmDataCard({ farmData, index }) {
             { 
               colorCode.split(" ").map((colour) => (
                 <div
+                  key={color}
                   className="w-[25px] h-[10px] rounded-full"
                   style={{backgroundColor: colour }}
                 />
