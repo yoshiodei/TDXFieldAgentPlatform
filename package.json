@@ -18,6 +18,9 @@
     "last 5 Firefox versions"
   ],
   "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.4",
     "dom7": "^4.0.6",

@@ -1,0 +1,9 @@
+{
+  "appId": "com.tdxfieldagent.app",
+  "appName": "tdxFieldAgentApp",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "webContentsDebuggingEnabled": true
+  }
+}
