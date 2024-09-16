@@ -22,7 +22,7 @@ export default function FarmDataCard({ farmData, index }) {
             { 
               colorCode.split(" ").map((colour) => (
                 <div
-                  key={color}
+                  key={colour}
                   className="w-[25px] h-[10px] rounded-full"
                   style={{backgroundColor: colour }}
                 />
@@ -36,15 +36,15 @@ export default function FarmDataCard({ farmData, index }) {
         </div>
         <div className="flex justify-between items-center h-[1.2em]">
           <p>Community:</p>
-          <p>{location.split(", ")[0]}</p>
-        </div>
-        <div className="flex justify-between items-center h-[1.2em]">
-          <p>District:</p>
           <p>{location.split(", ")[1]}</p>
         </div>
         <div className="flex justify-between items-center h-[1.2em]">
-          <p>Region:</p>
+          <p>District:</p>
           <p>{location.split(", ")[2]}</p>
+        </div>
+        <div className="flex justify-between items-center h-[1.2em]">
+          <p>Region:</p>
+          <p>{location.split(", ")[3]}</p>
         </div>
         <div className="flex justify-between items-center h-[1.2em]">
           <p>Commodity:</p>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaChevronLeft } from 'react-icons/fa6'
 import { Input, Page } from 'framework7-react'
 import PageTitle from '../components/pageTitle'
-import { commoditiesArray, monthsArray, regionsArray } from '../config'
+import { commoditiesArray, communityArray, monthsArray, regionsArray } from '../config'
 import store from '../js/store'
 import ErrorMessage from '../components/errorMessage'
 import axios from 'axios';
@@ -10,9 +10,7 @@ import useToast from '../components/toast'
 
 export default function connectFarmer({ f7router }) {
   const initialState = {
-    community: 'Samoa(Bongolo), Lambusie, Upper West',
-    name: '',
-    phone: '',
+    community: '1, Samoa(Bongolo), Lambusie, Upper West',
   };
 
   const [formData, setFormData] = useState({});
@@ -20,6 +18,12 @@ export default function connectFarmer({ f7router }) {
   const [farmerData, setFarmerData] = useState(initialState);
   const [errorMessage, setErrorMessage] = useState('');
   const [locationsArray, setLocationsArray] = useState([]);
+  const [verifiedFarmerData, setVerifiedFarmerData] = useState({
+    mobile: '',
+    first_name: '',
+    last_name: '',
+    id_farmdata: '',
+  });
 
   const showToast = useToast();
 
@@ -30,25 +34,8 @@ export default function connectFarmer({ f7router }) {
   }
 
   useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const response = await axios.post(
-          `https://torux.app/api/user/communities/${store.state.user.token}`,
-          {}, // This is the request body, currently empty
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${store.state.user.access_token}`,
-            },
-          }
-        );
-        setLocationsArray(response.data);
-      } catch (error) {
-        console.error('Error fetching commodities:', error);
-      }
-    };
-    
-    fetchLocations();
+    console.log('verified farmer', store.state.verifiedFarmer);
+    setVerifiedFarmerData(store.state.verifiedFarmer);
   }, []);
 
   const handleClearSelection = () => {
@@ -70,39 +57,22 @@ export default function connectFarmer({ f7router }) {
     return true;
   };
 
-  const isValid = (farmerData) => {
-    const {name, phone} = farmerData;
-
-    if( name.trim() === '' || phone.trim() === ''){
-      return {
-        errorMessage: 'Fields cannot be empty',
-        valid: false
-      }
-    }
-    
-    if( phone.trim().length < 10){
-      return {
-        errorMessage: 'Phone number too short',
-        valid: false
-      }
-    }
-
-    return {
-      errorMessage: '',
-      valid: true
-    }
-  };
-
   const handleSubmit = () => {
-    const { valid } = isValid(farmerData);
     const validForm = formDataIsValid(formData);
 
-    if(!valid || !validForm){
+    if(!validForm){
       showToast('Fields cannot be empty');
     }
 
-    if(valid && validForm){
-      const newConnection = {...farmerData, commodityDetails: formData};
+    if(validForm){
+      const newFarmerData = {
+        ...farmerData,
+        name: `${verifiedFarmerData.first_name} ${verifiedFarmerData.last_name}`,
+        phone: verifiedFarmerData.mobile,
+        token: verifiedFarmerData?.token,
+      }
+      const newConnection = {...newFarmerData, commodityDetails: formData};
+      console.log('you are sending the data:', newConnection);
       store.dispatch('setFarmerConnection', newConnection);
       f7router.navigate('/reviewFarmerConnection/');
       setErrorMessage('');
@@ -118,6 +88,7 @@ export default function connectFarmer({ f7router }) {
         checked, // Toggle the checkbox state
         preferredTime: 'january', // Initialize preferredTime if not present
         quantity: prevState[name]?.quantity || '', // Initialize quantity if not present
+        id_farmdata: `${verifiedFarmerData?.farm_data[0]?.id_farmdata}, ${verifiedFarmerData?.farm_data[0]?.farmname}`,
       },
     }));
   };
@@ -159,21 +130,18 @@ export default function connectFarmer({ f7router }) {
         <div>
           <label className="font-semibold">Name</label>
           <input
-            onChange={handleChangeForm}
-            name="name"
-            placeholder="Please enter name"
+            value={`${verifiedFarmerData.first_name} ${verifiedFarmerData.last_name}`}
+            readOnly={true}
             className="border border-slate-200 w-full h-[2.8em] px-3 rounded"
           />
         </div>
-        <div>
+                <div>
           <label className="font-semibold">Phone Number</label>
           <div className="w-auto h-auto border bg-white border-slate-200 rounded px-3">
             <input 
-              onChange={handleChangeForm}
-              name="phone"
-              placeholder="Please enter mobile number"
-              type="number"
-              className="w-full h-[2.8em]"
+             value={verifiedFarmerData.mobile}
+             readOnly={true}
+             className="w-full h-[2.8em]"
             />
           </div>
         </div>
@@ -185,9 +153,9 @@ export default function connectFarmer({ f7router }) {
               name="community"
               onChange={handleChangeForm}
             >
-              {locationsArray.map((item) => (
+              {communityArray.map((item) => (
                 <option
-                  value={`${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
+                  value={`${item?.id}, ${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
                   key={item?.id}
                 >
                   {`${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
@@ -252,7 +220,7 @@ export default function connectFarmer({ f7router }) {
                     </select>
                   </div> 
                 </div>
-                <div>
+                <div className="mb-3">
                   <label className="font-semibold mb-3">Quantity</label>
                   <div className="w-full rounded border border-slate-200 overflow-hidden relative">
                     <p className="absolute right-[10px] text-slate-500 top-[25%] font-semibold z-20">100kg bags</p>  
@@ -267,6 +235,24 @@ export default function connectFarmer({ f7router }) {
                       />
                     </div>
                   </div>  
+                </div>
+                {/* ------ */}
+                <div>
+                  <label className="font-semibold mb-3">Choose Farm</label>
+                  <div className="w-full rounded border border-slate-200 overflow-hidden">
+                    <select
+                      name="id_farmdata"
+                      value={formData[option].id_farmdata}
+                      className="bg-white w-full h-[2.8em] px-3"
+                      onChange={(event) => handleInputChange(event, option)}
+                    >
+                    {
+                      verifiedFarmerData?.farm_data.map((item) => (
+                        <option key={item?.id_farmdata} value={`${item?.id_farmdata}, ${item?.farmname}`}>{item?.farmname}</option>
+                      ))
+                    }
+                    </select>
+                  </div> 
                 </div>
               </div>
             </div>

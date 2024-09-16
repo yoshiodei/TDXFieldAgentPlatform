@@ -12,11 +12,13 @@ import {
   import axios from 'axios';
 import { successToast } from '../js/toast';
 import store from '../js/store';
+import useToast from '../components/toast';
 
 const verifyOTP = ({ f7route, f7router }) => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(true);
   const [resendCount, setResendCount] = useState(0);
+  const showToast = useToast();
 
   const initialTime = 300; // 5 minutes in seconds
   const [timeLeft, setTimeLeft] = useState(initialTime);
@@ -31,8 +33,8 @@ const verifyOTP = ({ f7route, f7router }) => {
         console.log('OTP sent successfully:', response.data);
       } catch (error) {
         console.error('Error sending OTP:', error);
-        f7.dialog.alert('Failed to send OTP. Please try again.');
-        f7router.back();
+        // f7router.navigate('/login/');
+        f7.dialog.alert(error.message);
       } finally {
         setLoading(false);
       }
@@ -82,8 +84,8 @@ const verifyOTP = ({ f7route, f7router }) => {
         f7router.navigate('/welcome/');
       } catch (error) {
         console.error('Error sending OTP:', error);
-        f7.dialog.alert('Failed to send OTP. Please try again.');
-        f7router.back();
+        // f7router.navigate('/login/');
+        f7.dialog.alert(error.message);
       } finally {
         setLoading(false);
       }

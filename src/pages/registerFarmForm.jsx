@@ -4,6 +4,7 @@ import { FaChevronLeft } from "react-icons/fa6"
 import FarmDataForm from '../components/farmDataForm';
 import { FaUser } from "react-icons/fa";
 import PageTitle from '../components/pageTitle';
+import { f7 } from 'framework7-react';
 import store from '../js/store';
 import ErrorMessage from '../components/errorMessage';
 import { colorCodes } from '../config';
@@ -13,7 +14,7 @@ const registerFarmFormPage = ({ f7router }) => {
     const initialState = [
         {    
           farmName: '',
-          location: 'Samoa(Bongolo), Lambusie, Upper West',
+          location: '1, Samoa(Bongolo), Lambusie, Upper West',
           yieldFromLastSeason: '',
           yearOfEstablishment: '2024',
           typeOfLabour: 'family labour',
@@ -22,8 +23,6 @@ const registerFarmFormPage = ({ f7router }) => {
           colorCode: 'none'
         }
     ];
-
-    const showToast = useToast();
 
     const [farmData, setFarmData] = useState(initialState);
     // const [errorMessage, setErrorMessage] = useState('');
@@ -63,7 +62,7 @@ const registerFarmFormPage = ({ f7router }) => {
 
       const newFarmData = {
         farmName: '',
-        location: 'Samoa(Bongolo), Lambusie, Upper West',
+        location: '1, Samoa(Bongolo), Lambusie, Upper West',
         yieldFromLastSeason: '',
         yearOfEstablishment: '2024',
         typeOfLabour: 'family labour',
@@ -83,7 +82,7 @@ const registerFarmFormPage = ({ f7router }) => {
 
       if(hasEmptyFields){
         // setErrorMessage('Fields cannot be empty');
-        showToast('Fields cannot be empty');
+        f7.dialog.alert('Fields cannot be empty');
       }
       else {
         // setErrorMessage('')

@@ -21,7 +21,7 @@ export default function RegistrationCompletePage({ f7router }) {
           onClick={() => f7router.navigate('/welcome/') }  
           className="w-[200px] h-[2.8em] rounded text-white flex items-center justify-center bg-primary"
         >
-          <h6 className="font-bold text-white">Back to Homepage</h6>
+          <h6 className="font-bold text-white">Back to Welcome page</h6>
         </button>
       </div>  
     </Page>

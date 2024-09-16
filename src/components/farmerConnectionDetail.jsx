@@ -27,15 +27,15 @@ export default function FarmerConnectionDetail({ farmerData, f7router }) {
             </div>
             <div className="flex justify-between items-center h-[1.2em]">
               <p>Community:</p>
-              <p>{community.split(', ')[0]}</p>
-            </div>
-            <div className="flex justify-between items-center h-[1.2em]">
-              <p>District:</p>
               <p>{community.split(', ')[1]}</p>
             </div>
             <div className="flex justify-between items-center h-[1.2em]">
-              <p>Region:</p>
+              <p>District:</p>
               <p>{community.split(', ')[2]}</p>
+            </div>
+            <div className="flex justify-between items-center h-[1.2em]">
+              <p>Region:</p>
+              <p>{community.split(', ')[3]}</p>
             </div>
           </div>
         </div>

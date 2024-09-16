@@ -1,56 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { MdDelete } from "react-icons/md";
-import { regionsArray } from '../config';
+import { commodityArray, communityArray, regionsArray } from '../config';
 import { getYearArray } from '../config/utils';
 import axios from 'axios';
 import store from '../js/store';
 
 export default function FarmDataForm({index, setFarmData, farmData, data}) {
   const count = index + 1;
-  // console.log('store:', store.state.user);
-  const [commoditiesArray, setCommoditiesArray] = useState([]);
-  const [locationsArray, setLocationsArray] = useState([]);
-
-  useEffect(() => {
-    const fetchCommodities = async () => {
-      try {
-        const response = await axios.post(
-          `https://torux.app/api/user/commodities/${store.state.user.token}`,
-          {}, // This is the request body, currently empty
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${store.state.user.access_token}`,
-            },
-          }
-        );
-        setCommoditiesArray(response.data);
-      } catch (error) {
-        console.error('Error fetching commodities:', error);
-      }
-    };
-
-    const fetchLocations = async () => {
-      try {
-        const response = await axios.post(
-          `https://torux.app/api/user/communities/${store.state.user.token}`,
-          {}, // This is the request body, currently empty
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${store.state.user.access_token}`,
-            },
-          }
-        );
-        setLocationsArray(response.data);
-      } catch (error) {
-        console.error('Error fetching commodities:', error);
-      }
-    };
-    
-    fetchLocations();
-    fetchCommodities();
-  }, []);
 
   const handleFarmFormChange = (e, index) => {
     const { value, name } = e.target;
@@ -100,9 +56,9 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
             value={data.location}
             onChange={(e) => handleFarmFormChange(e, index)}
           >
-            {locationsArray.map((item) => (
+            {communityArray.map((item) => (
               <option
-                value={`${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
+                value={`${item?.id}, ${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
                 key={item?.id}
               >
                 {`${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
@@ -182,7 +138,7 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
           name="commodity"
           onChange={(e) => handleFarmFormChange(e, index)}
           className="bg-white w-full h-[2.8em] px-3">
-          {commoditiesArray.map((item) => (
+          {commodityArray.map((item) => (
               <option value={item.name.toLowerCase()} key={item.id}>{item.name}</option>
             )
           )}

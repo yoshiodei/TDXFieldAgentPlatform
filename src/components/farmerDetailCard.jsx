@@ -15,14 +15,12 @@ const FarmerDetailCard = ({ farmerData, f7router }) => {
       idcardtype,
     } = farmerData;
 
-    console.log('farmerData raahhh raaww', farmerData);
-
     return (
         <div className="bg-blue-100 rounded-lg p-3 mb-4">
           <div className="flex justify-between items-center w-full">
             <h6 className="font-bold">Farmer Details</h6>  
             <button
-              onClick={() => f7router.navigate('/editFarmerRegistration/')}
+              onClick={() => f7router.back()}
               className="w-auto h-auto flex gap-x-2 items-center text-primary"
             >
               <FiEdit3 className="" />  

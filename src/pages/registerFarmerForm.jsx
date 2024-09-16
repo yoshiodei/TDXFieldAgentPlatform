@@ -11,15 +11,14 @@ import PageTitle from '../components/pageTitle';
 import ErrorMessage from '../components/errorMessage';
 import store from '../js/store';
 import useToast from '../components/toast';
-import { regionsArray } from '../config';
+import { communityArray, mobileNetworks, regionsArray } from '../config';
 
 const registerFarmerFormPage = ({f7router}) => {
   const initialState = {
     firstname: '',
     lastname: '',
-    community: '',
+    community: '1, Samoa(Bongolo), Lambusie, Upper West',
     mobilenumber: '',
-    network: 'MTN',
     gender: 'male',
     experience_year: '2024',
     idcardtype: '',
@@ -28,31 +27,6 @@ const registerFarmerFormPage = ({f7router}) => {
 
   const [farmerData, setFarmerData] = useState(initialState);
   const [locationsArray, setLocationsArray] = useState([]);
-
-  useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const response = await axios.post(
-          `https://torux.app/api/user/communities/${store.state.user.token}`,
-          {}, // This is the request body, currently empty
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${store.state.user.access_token}`,
-            },
-          }
-        );
-
-        const locationData = response.data
-        setLocationsArray(locationData);
-        setFarmerData({ ...farmerData, community: `${locationData[0].id}, ${locationData[0].name}, ${locationData[0].location}, ${regionsArray[(locationData[0].region - 1)]}` });
-      } catch (error) {
-        console.error('Error fetching commodities:', error);
-      }
-    };
-    
-    fetchLocations();
-  }, []);
 
   const showToast = useToast();
   
@@ -81,9 +55,9 @@ const registerFarmerFormPage = ({f7router}) => {
       }
     }
 
-    if(mobilenumber.trim().length !== 10){
+    if(mobilenumber.length !== 10){
       console.log('error: Phone number is too short');
-      showToast('Form incomplete');
+      f7.dialog.alert('Please enter a valid 10-digit mobile number');
       return {
         valid: false
       }  
@@ -125,8 +99,27 @@ const registerFarmerFormPage = ({f7router}) => {
     }
   };
 
+  function detectNetwork(number) {
+    const prefix = number.slice(0, 3);
+  
+    for (let network in mobileNetworks) {
+      
+      if (mobileNetworks[network].includes(prefix)) {
+        return { network: network };
+      }
+    }
+  
+    return { network: 'unknown' };
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(farmerData.mobilenumber.length !== 10 || !(/^\d+$/.test(farmerData.mobilenumber))){
+      f7.dialog.alert('Please enter a valid 10-digit mobile number');
+    }
+
+    else{
 
     const farmerList = await farmerExists(farmerData.mobilenumber);
 
@@ -137,13 +130,16 @@ const registerFarmerFormPage = ({f7router}) => {
 
     if(farmerList?.error){
       const {valid} = validateFarmerData(farmerData);
+      const network = detectNetwork(farmerData.mobilenumber);
+      
+      const newFarmerData = { ...farmerData, ...network }
 
       if(valid){
-        store.dispatch('setFarmer', farmerData);
+        store.dispatch('setFarmer', newFarmerData);
         f7router.navigate('/registerFarmForm/');
       }
     }
-
+    }
   }
 
   return (
@@ -195,7 +191,7 @@ const registerFarmerFormPage = ({f7router}) => {
                   name="community"
                   onChange={handleChangeForm}
                 >
-                  {locationsArray.map((item) => (
+                  {communityArray.map((item) => (
                     <option
                       value={`${item?.id}, ${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
                       key={item?.id}
@@ -218,20 +214,6 @@ const registerFarmerFormPage = ({f7router}) => {
                     <option value="female">Female</option>
                 </select>
                 </div>    
-            </div>
-            <div className="flex flex-col">
-                <label className="font-semibold">Mobile Network</label>
-                <div className="w-full rounded border border-slate-200 overflow-hidden">
-                  <select 
-                    name="network"
-                    className="bg-white w-full h-[2.8em] px-3"
-                    onChange={handleChangeForm}
-                  >
-                    <option value="MTN">MTN</option>
-                    <option value="Telecel">Telecel</option>
-                    <option value="AirtelTigo">AirtelTigo</option>
-                  </select> 
-                </div>
             </div>
             <div className="flex flex-col">
                 <label className="font-semibold">Phone Number</label>
@@ -281,7 +263,6 @@ const registerFarmerFormPage = ({f7router}) => {
                     name="idcardnumber"
                     onChange={handleChangeForm}
                     placeholder="Please enter mobile number"
-                    type="number"
                     className="w-full h-[2.8em]"
                 />
                 </div>

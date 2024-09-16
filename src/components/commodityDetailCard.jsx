@@ -21,20 +21,30 @@ export default function CommodityDetailCard({ farmerData, f7router }) {
           <div className="flex flex-col gap-y-2">
             {
               Object.keys(commodityDetails).map(
-                (commodity) => (
-                  <div className="mb-4">
+                (commodity) => {
+                  if(!commodityDetails[commodity].checked){
+                    return null;
+                  }
+
+                  return (
+                  <div className="mb-4" key={commodity}>
                     <h3 className="font-bold">{commodity}</h3>
                     <div className="w-full h-[1px] bg-slate-400 my-3" />
                     <div className="flex flex-col justify-between items-start mb-2">
                       <p className="font-semibold">Preferred sale time</p>
                       <p className="ps-2 capitalize">{commodityDetails[commodity].preferredTime}</p>
                     </div>
-                    <div className="flex flex-col justify-between items-start">
+                    <div className="flex flex-col justify-between items-start mb-2">
                       <p className="font-semibold">Quantity</p>
                       <p className="ps-2">{commodityDetails[commodity].quantity} 100Kg bag</p>
                     </div>
+                    <div className="flex flex-col justify-between items-start">
+                      <p className="font-semibold">Farm Name</p>
+                      <p className="ps-2 capitalize">{commodityDetails[commodity]?.id_farmdata?.split(', ')[1]}</p>
+                    </div>
                   </div>
                 )
+                }
               )
             }
           </div>

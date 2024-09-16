@@ -54,7 +54,7 @@ const WelcomePage = ({ f7router }) => {
           </button>
           <button
             className="px-3 flex justify-between items-center rounded-lg bg-primary h-20 w-full"
-            onClick={() => f7router.navigate('/connectFarmer/')}
+            onClick={() => f7router.navigate('/verifyFarmer/')}
           >
             <div className="flex gap-x-8 items-center">
               <div className="h-[60px] w-[60px] bg-white rounded-full overflow-hidden">

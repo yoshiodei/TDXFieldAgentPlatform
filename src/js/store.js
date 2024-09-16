@@ -16,7 +16,8 @@ const store = createStore({
     user: initialState,
     farmer: {},
     farmData: [],
-    connectFarmer: {} 
+    connectFarmer: {},
+    verifiedFarmer: {},
   },
   getters: {
     user({ state }) {
@@ -45,15 +46,33 @@ const store = createStore({
     setFarmData({ state }, farmData) {
       state.farmData = farmData;
     },
+    setVerifiedFarmer({ state }, farmData) {
+      state.verifiedFarmer = farmData;
+    },
     setFarmerConnection({ state }, connectionData) {
       state.connectFarmer = connectionData;
+    },
+    farmerIntentComplete({ state }) {
+      state = {
+        ...state,
+        connectFarmer: {},
+        verifiedFarmer: {}, 
+      };
+    },
+    farmerRegistrationComplete({ state }) {
+      state = {
+        ...state,
+        farmer: {},
+        farmData: [],
+      };
     },
     resetState({ state }) {
       state = {
         user: initialState,
         farmer: {},
         farmData: [],
-        connectFarmer: {} 
+        connectFarmer: {},
+        verifiedFarmer: {},
       };
     },
 
