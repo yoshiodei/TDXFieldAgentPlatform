@@ -28,16 +28,48 @@ const verifyOTP = ({ f7route, f7router }) => {
 
   useEffect(() => {
     const sendOtp = async () => {
-      try {
-        const response = await axios.post(`https://torux.app/api/agentsignIn?mobile=${phoneNumber}`);
-        console.log('OTP sent successfully:', response.data);
-      } catch (error) {
-        console.error('Error sending OTP:', error);
-        // f7router.navigate('/login/');
-        f7.dialog.alert(error.message);
-      } finally {
-        setLoading(false);
-      }
+
+      axios.post(`https://torux.app/api/agentsignIn?mobile=${phoneNumber}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          console.log("Success:", response.data);
+        } else {
+          console.log("Unexpected status code:", response.status);
+        }
+      })
+      .catch(function (error) {
+        if (error.response) {
+          console.log("Error status code:", error.response.status);
+          console.log("Error data:", error.response.data);
+          f7.dialog.alert('Error status code', error.response.status);
+        } else if (error.request) {
+          console.log("No response received:", error.request);
+          f7.dialog.alert('No response received', error.request);
+        } else {
+          console.log("Error", error.message);
+          f7.dialog.alert('Error message', error.message);
+        }
+      });
+
+      // try {
+      //   const response = await axios.post(`https://torux.app/api/agentsignIn?mobile=${phoneNumber}`);
+      //   console.log('OTP sent successfully:', response.data);
+
+      //   if (response.data.error === true) {
+      //     console.error('Error in response:', response.data.message);
+      //     f7.dialog.alert('OTP Verification Error', response.data.message);
+      //   } else {
+      //     // If no error, handle success
+      //     console.log('OTP sent successfully:', response.data.message);
+      //   }
+
+      // } catch (error) {
+      //   console.error('Error sending OTP:', error);
+      //   // f7router.navigate('/login/');
+      //   f7.dialog.alert('OTP Verification Error', error);
+      // } finally {
+      //   setLoading(false);
+      // }
     };
 
     sendOtp();
@@ -85,7 +117,7 @@ const verifyOTP = ({ f7route, f7router }) => {
       } catch (error) {
         console.error('Error sending OTP:', error);
         // f7router.navigate('/login/');
-        f7.dialog.alert(error);
+        f7.dialog.alert('OTP Verification Error', error);
       } finally {
         setLoading(false);
       }
