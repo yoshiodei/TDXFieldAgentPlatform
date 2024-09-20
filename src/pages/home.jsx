@@ -28,7 +28,7 @@ import {
   <Page name="home"> 
    <div className="h-[100vh] w-[100vw] bg-primary p-5 relative">
       <div className="mb-5 mt-[10vh] w-[65vw] text-font-light">  
-        <h1 className="text-lg font-bold">Hi TDX Field Agent.</h1>
+        <h1 className="text-lg font-bold">Hi TDX Field Agent!</h1>
         <p>Use this platform to collect farm and farmer data in your community.</p>
       </div>
       <button
