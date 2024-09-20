@@ -85,7 +85,7 @@ const verifyOTP = ({ f7route, f7router }) => {
       } catch (error) {
         console.error('Error sending OTP:', error);
         // f7router.navigate('/login/');
-        f7.dialog.alert(error.message);
+        f7.dialog.alert(error);
       } finally {
         setLoading(false);
       }
