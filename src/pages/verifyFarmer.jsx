@@ -53,7 +53,7 @@ const VerifyFarmerPage = ({f7router}) => {
 
     if(!farmerData?.token){
       console.log('farmer does not exist', farmerData);
-      showToast('Farmer does not exist');
+      f7.dialog.alert('Farmer does not exist');
       f7router.navigate('/welcome/');
     }
   }
