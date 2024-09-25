@@ -13,6 +13,7 @@ import {
 import { successToast } from '../js/toast';
 import store from '../js/store';
 import useToast from '../components/toast';
+import { sendOTPToPhone } from '../config/utils';
 
 const verifyOTP = ({ f7route, f7router }) => {
   const [otp, setOtp] = useState('');
@@ -29,50 +30,51 @@ const verifyOTP = ({ f7route, f7router }) => {
   useEffect(() => {
     const sendOtp = async () => {
 
-      axios.post(`https://torux.app/api/agentsignIn?mobile=${phoneNumber}`)
-      .then(function (response) {
-        if (response.status === 200) {
-          console.log("Success:", response.data);
-        } else {
-          console.log("Unexpected status code:", response.status);
-        }
-      })
-      .catch(function (error) {
-        if (error.response) {
-          console.log("Error status code:", error.response.status);
-          console.log("Error data:", error.response.data);
-          f7.dialog.alert('Error status code', error.response.status);
-        } else if (error.request) {
-          console.log("No response received:", error.request);
-          f7.dialog.alert('No response received', error.request);
-        } else {
-          console.log("Error", error.message);
-          f7.dialog.alert('Error message', error.message);
-        }
-      });
-
-      // try {
-      //   const response = await axios.post(`https://torux.app/api/agentsignIn?mobile=${phoneNumber}`);
-      //   console.log('OTP sent successfully:', response.data);
-
-      //   if (response.data.error === true) {
-      //     console.error('Error in response:', response.data.message);
-      //     f7.dialog.alert('OTP Verification Error', response.data.message);
+      // axios.post(`https://torux.app/api/agentsignIn?mobile=${phoneNumber}`)
+      // .then(function (response) {
+      //   if (response.status === 200) {
+      //     console.log("Success:", response.data);
       //   } else {
-      //     // If no error, handle success
-      //     console.log('OTP sent successfully:', response.data.message);
+      //     console.log("Unexpected status code:", response.status);
       //   }
+      // })
+      // .catch(function (error) {
+      //   if (error.response) {
+      //     console.log("Error status code:", error.response.status);
+      //     console.log("Error data:", error.response.data);
+      //     f7.dialog.alert('Error status code', error.response.status);
+      //   } else if (error.request) {
+      //     console.log("No response received:", error.request);
+      //     f7.dialog.alert('No response received', error.request);
+      //   } else {
+      //     console.log("Error", error.message);
+      //     f7.dialog.alert('Error message', error.message);
+      //   }
+      // });
 
-      // } catch (error) {
-      //   console.error('Error sending OTP:', error);
-      //   // f7router.navigate('/login/');
-      //   f7.dialog.alert('OTP Verification Error', error);
-      // } finally {
-      //   setLoading(false);
-      // }
+      try {
+        const response = await axios.post(`https://torux.app/api/agentsignIn?mobile=${phoneNumber}`);
+        console.log('OTP sent successfully:', response.data);
+
+        if (response.data.error === true) {
+          console.error('Error in response:', response.data.message);
+          f7.dialog.alert('OTP Verification Error', response.data.message);
+        } else {
+          // If no error, handle success
+          console.log('OTP sent successfully:', response.data.message);
+        }
+
+      } catch (error) {
+        console.error('Error sending OTP:', error);
+        // f7router.navigate('/login/');
+        f7.dialog.alert('OTP Verification Error', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     sendOtp();
+    // sendOTPToPhone(phoneNumber);
   }, [phoneNumber, f7router, resendCount]);
 
   useEffect(() => {
@@ -111,9 +113,16 @@ const verifyOTP = ({ f7route, f7router }) => {
         const response = await axios.post(`https://torux.app/api/otpverify?code=${otp}`);
         console.log('OTP verified successfully:', response.data);
         const data = response.data;
-        store.dispatch('setUser', data);
-        successToast('OTP verified successfully');
-        f7router.navigate('/welcome/');
+
+        if(data.error){
+          f7.dialog.alert('Invalid Pin');
+        }
+
+        if(!data.error){
+          store.dispatch('setUser', data);
+          successToast('OTP verified successfully');
+          f7router.navigate('/welcome/');
+        }
       } catch (error) {
         console.error('Error sending OTP:', error);
         // f7router.navigate('/login/');
@@ -148,6 +157,7 @@ const verifyOTP = ({ f7route, f7router }) => {
               value={otp}
               onChange={handleOTPChange}
               numInputs={4}
+              inputType="number"
               containerStyle={{
                 display: 'flex',
                 justifyContent: 'space-between',

@@ -16,28 +16,30 @@ const VerifyFarmerPage = ({f7router}) => {
 
   const showToast = useToast();
 
-  const farmerExists = async (phone) => {  
-    try {
-      const response = await axios.post(
-        `https://torux.app/api/user/findfarmer/${store.state.user.token}`,
-        { find: phone }, // This is the request body, currently empty
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${store.state.user.access_token}`,
-          },
+  const farmerExists = async (phone) => {
+          try {
+          const response = await axios.post(
+            `https://torux.app/api/user/findfarmer/${store.state.user.token}`,
+            { find: phone }, // This is the request body, currently empty
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${store.state.user.access_token}`,
+              },
+            }
+          );
+          const farmerInfo = response.data;
+          return farmerInfo;
+        } catch (error) {
+          // f7.dialog.alert('Error access token:', `${store.state.user.access_token}`);
+          console.error('Error fetching farmer:', error.response.data);
+          return { 
+              error: true,
+              message: "Error fetching farmer"
+            }
         }
-      );
-      const farmerInfo = response.data;
-      return farmerInfo;
-    } catch (error) {
-      console.error('Error fetching farmer:', error.response.data);
-      return { 
-           error: true,
-           message: "Error fetching farmer"
-        }
-    }
-  };
+      };
+    
 
   const handleSubmit = async (e) => {
     e.preventDefault();
