@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaChevronLeft } from 'react-icons/fa6'
 import { Input, Page } from 'framework7-react'
 import PageTitle from '../components/pageTitle'
-import { commoditiesArray, communityArray, monthsArray, regionsArray } from '../config'
+import { commoditiesArray, monthsArray, regionsArray } from '../config'
 import store from '../js/store'
 import ErrorMessage from '../components/errorMessage'
 import axios from 'axios';
@@ -14,6 +14,7 @@ export default function connectFarmer({ f7router }) {
   };
 
   const [formData, setFormData] = useState({});
+  const [communities, setCommunities] = useState([]);
 
   const [farmerData, setFarmerData] = useState(initialState);
   const [errorMessage, setErrorMessage] = useState('');
@@ -32,6 +33,30 @@ export default function connectFarmer({ f7router }) {
     setErrorMessage('');
     setFarmerData({...farmerData, [name]: value});
   }
+
+  const fetchCommunities = async () => {
+    try {
+      const response = await axios.post(
+        `https://torux.app/api/user/communities/${store.state.user.token}`,
+        {}, // This is the request body, currently empty
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.user.access_token}`,
+          },
+        }
+      );
+      const communityList = response.data;
+      setCommunities(communityList);
+    } catch (error) {
+      console.error('Error fetching farmer:', error.response.data);
+      f7.dialog.alert('Unable to fetch communities');
+    }
+  }
+
+  useEffect(() => {
+    fetchCommunities();
+  }, []);
 
   useEffect(() => {
     console.log('verified farmer', store.state.verifiedFarmer);
@@ -153,7 +178,7 @@ export default function connectFarmer({ f7router }) {
               name="community"
               onChange={handleChangeForm}
             >
-              {communityArray.map((item) => (
+              {communities.map((item) => (
                 <option
                   value={`${item?.id}, ${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
                   key={item?.id}

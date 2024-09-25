@@ -11,7 +11,7 @@ import PageTitle from '../components/pageTitle';
 import ErrorMessage from '../components/errorMessage';
 import store from '../js/store';
 import useToast from '../components/toast';
-import { communityArray, mobileNetworks, regionsArray } from '../config';
+import { mobileNetworks, regionsArray } from '../config';
 
 const registerFarmerFormPage = ({f7router}) => {
   const initialState = {
@@ -27,6 +27,31 @@ const registerFarmerFormPage = ({f7router}) => {
 
   const [farmerData, setFarmerData] = useState(initialState);
   const [locationsArray, setLocationsArray] = useState([]);
+  const [communities, setCommunities] = useState([]);
+
+  const fetchCommunities = async () => {
+    try {
+      const response = await axios.post(
+        `https://torux.app/api/user/communities/${store.state.user.token}`,
+        {}, // This is the request body, currently empty
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.user.access_token}`,
+          },
+        }
+      );
+      const communityList = response.data;
+      setCommunities(communityList);
+    } catch (error) {
+      console.error('Error fetching farmer:', error.response.data);
+      f7.dialog.alert('Unable to fetch communities');
+    }
+  }
+
+  useEffect(() => {
+    fetchCommunities();
+  }, []);
 
   const showToast = useToast();
   
@@ -139,6 +164,10 @@ const registerFarmerFormPage = ({f7router}) => {
         f7router.navigate('/registerFarmForm/');
       }
     }
+
+    else {
+      f7.dialog.alert('Error:', farmerList);
+    }
     }
   }
 
@@ -191,7 +220,7 @@ const registerFarmerFormPage = ({f7router}) => {
                   name="community"
                   onChange={handleChangeForm}
                 >
-                  {communityArray.map((item) => (
+                  {communities.map((item) => (
                     <option
                       value={`${item?.id}, ${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
                       key={item?.id}

@@ -1,11 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { MdDelete } from "react-icons/md";
-import { commodityArray, communityArray, regionsArray } from '../config';
+import { commodityArray, regionsArray } from '../config';
 import { getYearArray } from '../config/utils';
 import axios from 'axios';
 import store from '../js/store';
 
 export default function FarmDataForm({index, setFarmData, farmData, data}) {
+  const [communities, setCommunities] = useState([]);
+
+  const fetchCommunities = async () => {
+    try {
+      const response = await axios.post(
+        `https://torux.app/api/user/communities/${store.state.user.token}`,
+        {}, // This is the request body, currently empty
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.user.access_token}`,
+          },
+        }
+      );
+      const communityList = response.data;
+      setCommunities(communityList);
+    } catch (error) {
+      console.error('Error fetching farmer:', error.response.data);
+      f7.dialog.alert('Unable to fetch communities');
+    }
+  }
+
+  useEffect(() => {
+    fetchCommunities();
+  }, []);
+
   const count = index + 1;
 
   const handleFarmFormChange = (e, index) => {
@@ -56,7 +82,7 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
             value={data.location}
             onChange={(e) => handleFarmFormChange(e, index)}
           >
-            {communityArray.map((item) => (
+            {communities.map((item) => (
               <option
                 value={`${item?.id}, ${item?.name}, ${item?.location}, ${regionsArray[Number(item?.region)-1]}`}
                 key={item?.id}
