@@ -20,7 +20,7 @@ const FarmerDetailCard = ({ farmerData, f7router }) => {
           <div className="flex justify-between items-center w-full">
             <h6 className="font-bold">Farmer Details</h6>  
             <button
-              onClick={() => f7router.back()}
+              onClick={() => f7router.navigate('/editFarmerRegistration/')}
               className="w-auto h-auto flex gap-x-2 items-center text-primary"
             >
               <FiEdit3 className="" />  
