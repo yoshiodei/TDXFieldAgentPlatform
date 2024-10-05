@@ -115,10 +115,10 @@ const commodityPosition = (commodityName) => {
         <div className="px-5 flex items-center bg-white h-[60px]">
           <button
             className="flex items-center gap-x-2"
-            onClick={() => f7router.back() }
+            onClick={() => f7router.navigate('/welcome/') }
           >
             <FaChevronLeft className="text-[0.8em] text-primary-dark" />
-            <h6>Back</h6>
+            <h6>Back To Welcome</h6>
           </button>  
         </div> 
         <div className="p-5">

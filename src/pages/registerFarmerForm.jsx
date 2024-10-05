@@ -50,6 +50,7 @@ const registerFarmerFormPage = ({f7router}) => {
   }
 
   useEffect(() => {
+    setFarmerData(store.state.farmer)
     fetchCommunities();
   }, []);
 
@@ -198,6 +199,7 @@ const registerFarmerFormPage = ({f7router}) => {
                 <label className="font-semibold">First Name</label>
                 <input
                   name="firstname"
+                  value={farmerData.firstname}
                   onChange={handleChangeForm}
                   placeholder="Please enter name"
                   className="border border-slate-200 w-full h-[2.8em] px-3 rounded"
@@ -207,6 +209,7 @@ const registerFarmerFormPage = ({f7router}) => {
               <label className="font-semibold">Last Name</label>
               <input
                 name="lastname"
+                value={farmerData.lastname}
                 onChange={handleChangeForm}
                 placeholder="Please enter name"
                 className="border border-slate-200 w-full h-[2.8em] px-3 rounded"
@@ -218,6 +221,7 @@ const registerFarmerFormPage = ({f7router}) => {
                 <select
                   className="bg-white w-full h-[2.8em] px-3"
                   name="community"
+                  value={farmerData.community}
                   onChange={handleChangeForm}
                 >
                   {communities.map((item) => (
@@ -237,6 +241,7 @@ const registerFarmerFormPage = ({f7router}) => {
                 <div className="w-full rounded border border-slate-200 overflow-hidden">
                 <select 
                   name="gender"
+                  value={farmerData.gender}
                   onChange={handleChangeForm}
                   className="bg-white w-full h-[2.8em] px-3">
                     <option value="male">Male</option>
@@ -249,6 +254,7 @@ const registerFarmerFormPage = ({f7router}) => {
                 <div className="w-auto h-auto border border-slate-200 rounded px-3">
                 <input 
                     name="mobilenumber"
+                    value={farmerData.mobilenumber}
                     onChange={handleChangeForm}
                     placeholder="Please enter mobile number"
                     type="number"
@@ -261,6 +267,7 @@ const registerFarmerFormPage = ({f7router}) => {
                 <div className="w-full rounded border border-slate-200 overflow-hidden">
                 <select
                   name="experience_year"
+                  value={farmerData.experience_year}
                   onChange={handleChangeForm}
                   className="bg-white w-full h-[2.8em] px-3">
                      {
@@ -276,6 +283,7 @@ const registerFarmerFormPage = ({f7router}) => {
                 <div className="w-full rounded border border-slate-200 overflow-hidden">
                 <select
                   name="idcardtype"
+                  value={farmerData.idcardtype}
                   onChange={handleChangeForm}
                   className="bg-white w-full h-[2.8em] px-3"
                 >
@@ -290,6 +298,7 @@ const registerFarmerFormPage = ({f7router}) => {
                 <div className="w-auto h-auto border border-slate-200 rounded px-3">
                 <input 
                     name="idcardnumber"
+                    value={farmerData.idcardnumber}
                     onChange={handleChangeForm}
                     placeholder="Please enter mobile number"
                     className="w-full h-[2.8em]"

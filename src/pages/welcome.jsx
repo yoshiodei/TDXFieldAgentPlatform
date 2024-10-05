@@ -66,6 +66,9 @@ const WelcomePage = ({ f7router }) => {
              <FaChevronRight className="text-[1.2em] text-white" />
             </div>
           </button>
+          <button onClick={() => f7router.navigate('/onboardedFarmers/')} className="bg-slate-300 w-auto p-5 rounded-lg flex justify-center items-center">
+            <h5 className="font-semibold text-lg text-gray-600">List of onboarded farmers</h5>
+          </button>
         </div>
         <div className="flex justify-center items-end w-full mt-32">
           <button 

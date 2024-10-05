@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Page } from 'framework7-react';
 import { FaChevronLeft } from "react-icons/fa6"
 import FarmDataForm from '../components/farmDataForm';
@@ -17,7 +17,7 @@ const registerFarmFormPage = ({ f7router }) => {
           location: '1, Samoa(Bongolo), Lambusie, Upper West',
           yieldFromLastSeason: '',
           yearOfEstablishment: '2024',
-          typeOfLabour: 'family labour',
+          typeOfLabour: ['family labour'],
           size: '',
           commodity: 'white maize',
           colorCode: 'none'
@@ -26,6 +26,11 @@ const registerFarmFormPage = ({ f7router }) => {
 
     const [farmData, setFarmData] = useState(initialState);
     // const [errorMessage, setErrorMessage] = useState('');
+
+    useEffect(() => {
+      setFarmData(store.state.farmData);
+    }, [])
+    
 
     const assignColorCodes = () => {
       const commodityCount = {};
@@ -65,7 +70,7 @@ const registerFarmFormPage = ({ f7router }) => {
         location: '1, Samoa(Bongolo), Lambusie, Upper West',
         yieldFromLastSeason: '',
         yearOfEstablishment: '2024',
-        typeOfLabour: 'family labour',
+        typeOfLabour: ['family labour'],
         size: '',
         commodity: 'white maize',
         colorCode: 'none'
@@ -77,13 +82,14 @@ const registerFarmFormPage = ({ f7router }) => {
     const handleSubmit = (event) => {
       event.preventDefault();
       const hasEmptyFields = farmData.some(
-        (data) => (data.farmName.trim() === '' || data.yieldFromLastSeason.trim() === '' || data.size.trim() === '')
+        (data) => (data.farmName.trim() === '' || data.yieldFromLastSeason.trim() === '' || data.size.trim() === '' || data.typeOfLabour.length === 0)
       );
 
       if(hasEmptyFields){
         // setErrorMessage('Fields cannot be empty');
         f7.dialog.alert('Fields cannot be empty');
       }
+
       else {
         // setErrorMessage('')
         assignColorCodes();
