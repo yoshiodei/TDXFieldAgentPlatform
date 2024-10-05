@@ -11,11 +11,35 @@ const initialState = {
   access_token: ''
 }
 
+const initialFarmerState = {
+  firstname: '',
+  lastname: '',
+  community: '1, Samoa(Bongolo), Lambusie, Upper West',
+  mobilenumber: '',
+  gender: 'male',
+  experience_year: '2024',
+  idcardtype: '',
+  idcardnumber: '',
+}
+
+const initialStateFarmData = [
+  {    
+    farmName: '',
+    location: '1, Samoa(Bongolo), Lambusie, Upper West',
+    yieldFromLastSeason: '',
+    yearOfEstablishment: '2024',
+    typeOfLabour: ['family labour'],
+    size: '',
+    commodity: 'white maize',
+    colorCode: 'none'
+  }
+];
+
 const store = createStore({
   state: {
     user: initialState,
-    farmer: {},
-    farmData: [],
+    farmer: initialFarmerState,
+    farmData: initialStateFarmData,
     connectFarmer: {},
     verifiedFarmer: {},
   },
