@@ -7,6 +7,7 @@ import store from '../js/store';
 
 export default function FarmDataForm({index, setFarmData, farmData, data}) {
   const [communities, setCommunities] = useState([]);
+  const [typeOfLabour, setTypeOfLabour] = useState([]);
 
   const fetchCommunities = async () => {
     try {
@@ -46,6 +47,22 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
     const newFarmData = farmData.filter((_, i) => (i !== index));
     setFarmData(newFarmData);
   }
+
+  const handleLabourChange = (event) => {
+    const { name, checked } = event.target;
+
+    if (checked) {
+      const newFarmData = [...farmData];
+      console.log('it is', newFarmData[index]['typeOfLabour']);
+      newFarmData[index]['typeOfLabour'] = [ ...newFarmData[index]['typeOfLabour'], name ];
+      setFarmData(newFarmData);
+    } else {
+      const newFarmData = [...farmData];
+      const newLabourArray = newFarmData[index]['typeOfLabour'].filter(option => option !== name);
+      newFarmData[index]['typeOfLabour'] = newLabourArray;
+      setFarmData(newFarmData);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-y-3">
@@ -141,7 +158,7 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
         </select> 
       </div>
       </div>
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <label className="font-semibold">Type Of Labour</label>
         <div className="w-full rounded border border-slate-200 overflow-hidden">
         <select
@@ -155,6 +172,23 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
           <option value="contract">Contract</option>
         </select> 
       </div>
+    </div> */}
+    <div className="flex flex-col">
+        <label className="font-semibold">Type Of Labour</label>
+        <div className="flex flex-col gap-y-4 pt-3 px-3">
+         <div className="flex gap-x-3 items-center">
+           <input onChange={handleLabourChange} checked={data.typeOfLabour.includes('family labour')} type="checkbox" name="family labour" value="family labour" />
+           <h6 className="font-semibold">Family Labour</h6> 
+         </div>
+         <div className="flex gap-x-3 items-center">
+           <input type="checkbox" checked={data.typeOfLabour.includes('hired labour')} onChange={handleLabourChange} name="hired labour" value="hired labour" />
+           <h6 className="font-semibold">Hired Labour</h6> 
+         </div>
+         <div className="flex gap-x-3 items-center">
+           <input type="checkbox" value="contract" checked={data.typeOfLabour.includes('contract')} name="contract" onChange={handleLabourChange} />
+           <h6 className="font-semibold">Contract</h6> 
+         </div>
+       </div>
     </div>
       <div className="flex flex-col">
         <label className="font-semibold">Commodity</label>

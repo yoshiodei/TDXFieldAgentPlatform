@@ -62,9 +62,15 @@ export default function FarmDataCard({ farmData, index }) {
           <p>Year of Establishment:</p>
           <p>{yearOfEstablishment}</p>
         </div>
-        <div className="flex justify-between items-center h-[1.2em]">
+        <div className="flex justify-between items-start h-[auto]">
           <p>Type of Labour:</p>
-          <p>{typeOfLabour}</p>
+          <div>
+            <ul>
+              {typeOfLabour.map((type) => (
+                <li key={type} >{`- ${type}`}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
   )
