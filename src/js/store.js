@@ -14,6 +14,7 @@ const initialState = {
 const initialFarmerState = {
   firstname: '',
   lastname: '',
+  dateofbirth: '',
   community: '1, Samoa(Bongolo), Lambusie, Upper West',
   mobilenumber: '',
   gender: 'male',
@@ -86,15 +87,15 @@ const store = createStore({
     farmerRegistrationComplete({ state }) {
       state = {
         ...state,
-        farmer: {},
-        farmData: [],
+        farmer: initialFarmerState,
+        farmData: initialStateFarmData,
       };
     },
     resetState({ state }) {
       state = {
         user: initialState,
-        farmer: {},
-        farmData: [],
+        farmer: initialFarmerState,
+        farmData: initialStateFarmData,
         connectFarmer: {},
         verifiedFarmer: {},
       };
