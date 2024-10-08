@@ -17,6 +17,7 @@ const registerFarmerFormPage = ({f7router}) => {
   const initialState = {
     firstname: '',
     lastname: '',
+    dateofbirth: '',
     community: '1, Samoa(Bongolo), Lambusie, Upper West',
     mobilenumber: '',
     gender: 'male',
@@ -68,14 +69,15 @@ const registerFarmerFormPage = ({f7router}) => {
   const handleChangeForm = (e) => {
     const { value, name } = e.target;
     setFarmerData({ ...farmerData, [name]: value });
+    console.log('farmer data is', farmerData);
   } 
 
   const validateFarmerData = (farmerData) => {
-    const {firstname, lastname, mobilenumber, idcardtype, idcardnumber } = farmerData;
+    const {firstname, lastname, mobilenumber, idcardtype, idcardnumber, dateofbirth } = farmerData;
 
-    if( !firstname.trim() || !lastname.trim() || !mobilenumber.trim()){
+    if( !firstname.trim() || !lastname.trim() || !mobilenumber.trim() || !dateofbirth){
       console.log('error: Fields cannot be empty');
-      showToast('Form incomplete');
+      f7.dialog.alert('Fields cannot be left empty');
       return {
         valid: false
       }
@@ -250,8 +252,21 @@ const registerFarmerFormPage = ({f7router}) => {
                 </div>    
             </div>
             <div className="flex flex-col">
+                <label className="font-semibold">Date of Birth</label>
+                <div className="w-full rounded border border-slate-200 bg-white px-3 overflow-hidden">
+                  <input
+                    name="dateofbirth"
+                    type="date"
+                    value={farmerData.dateofbirth}
+                    onChange={handleChangeForm}
+                    placeholder="Please select your date of birth"
+                    className="border border-slate-200 w-full h-[2.8em] px-3 rounded"
+                  />
+                </div>
+            </div>
+            <div className="flex flex-col">
                 <label className="font-semibold">Phone Number</label>
-                <div className="w-auto h-auto border border-slate-200 rounded px-3">
+                <div className="w-auto h-auto border border-slate-200 rounded px-3 bg-white">
                 <input 
                     name="mobilenumber"
                     value={farmerData.mobilenumber}
@@ -280,7 +295,7 @@ const registerFarmerFormPage = ({f7router}) => {
             </div>
             <div className="flex flex-col">
                 <label className="font-semibold">ID Card Type (Optional)</label>
-                <div className="w-full rounded border border-slate-200 overflow-hidden">
+                <div className="w-full rounded border border-slate-200 overflow-hidden bg-white ">
                 <select
                   name="idcardtype"
                   value={farmerData.idcardtype}
@@ -295,7 +310,7 @@ const registerFarmerFormPage = ({f7router}) => {
             </div>
             <div className="flex flex-col">
                 <label className="font-semibold">ID Card Number (Optional)</label>
-                <div className="w-auto h-auto border border-slate-200 rounded px-3">
+                <div className="w-auto h-auto border border-slate-200 rounded px-3 bg-white">
                 <input 
                     name="idcardnumber"
                     value={farmerData.idcardnumber}
