@@ -3,6 +3,7 @@ import store from '../js/store'
 import TDXLogo from '../assets/tdx_logo.png'
 import ConnectFarmerImage from '../assets/Connect_Farmer.png'
 import RegisterFarmerImage from '../assets/Register_Farmer.png'
+import OnboardFarmerImage from '../assets/farmers_shaking_hands.png'
 import { FaChevronRight } from "react-icons/fa6"
 import { ImSwitch } from "react-icons/im"
 import {
@@ -66,8 +67,19 @@ const WelcomePage = ({ f7router }) => {
              <FaChevronRight className="text-[1.2em] text-white" />
             </div>
           </button>
-          <button onClick={() => f7router.navigate('/onboardedFarmers/')} className="bg-slate-300 w-auto p-5 rounded-lg flex justify-center items-center">
-            <h5 className="font-semibold text-lg text-gray-600">List of onboarded farmers</h5>
+          <button
+            className="px-3 flex justify-between items-center rounded-lg bg-primary h-20 w-full"
+            onClick={() => f7router.navigate('/onboardedFarmers/')}
+          >
+            <div className="flex gap-x-8 items-center">
+              <div className="h-[60px] w-[60px] bg-white rounded-full overflow-hidden">
+                <img src={OnboardFarmerImage} alt="onboard farmer" />
+              </div>
+              <h6 className="font-bold text-[1.1em] text-white w-[140px] text-left">List of onboarded farmers</h6>
+            </div>
+            <div className="flex justify-center items-center">
+             <FaChevronRight className="text-[1.2em] text-white" />
+            </div>
           </button>
         </div>
         <div className="flex justify-center items-end w-full mt-32">
