@@ -1,4 +1,3 @@
-
 import { createStore } from 'framework7/lite';
 
 const initialState = {
@@ -14,7 +13,7 @@ const initialState = {
 const initialFarmerState = {
   firstname: '',
   lastname: '',
-  dateofbirth: '',
+  age: '',
   community: '1, Samoa(Bongolo), Lambusie, Upper West',
   mobilenumber: '',
   gender: 'male',
@@ -31,8 +30,8 @@ const initialStateFarmData = [
     yearOfEstablishment: '2024',
     typeOfLabour: ['family labour'],
     size: '',
-    commodity: 'white maize',
-    colorCode: 'none'
+    commodity: [],
+    colorCode: 'none',
   }
 ];
 
@@ -78,18 +77,12 @@ const store = createStore({
       state.connectFarmer = connectionData;
     },
     farmerIntentComplete({ state }) {
-      state = {
-        ...state,
-        connectFarmer: {},
-        verifiedFarmer: {}, 
-      };
+        state.connectFarmer = {};
+        state.verifiedFarmer = {}; 
     },
     farmerRegistrationComplete({ state }) {
-      state = {
-        ...state,
-        farmer: initialFarmerState,
-        farmData: initialStateFarmData,
-      };
+        state.farmer = initialFarmerState;
+        state.farmData = initialStateFarmData;
     },
     resetState({ state }) {
       state = {

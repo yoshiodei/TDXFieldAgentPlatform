@@ -14,6 +14,8 @@ import ReviewFarmerConnectionPage from '../pages/reviewFarmerConnection.jsx';
 import EditRegisterFarmerPage from '../pages/editRegisterFarmerFormPage.jsx';
 import EditRegisterFarmFormPage from '../pages/editRegisterFarmFormPage.jsx';
 import OnboardedFarmers from '../pages/onboardedFarmersList.jsx';
+import OnboardedFarmerDetail from '../pages/OnboardedFarmerDetail.jsx';
+import EditOnboardedFarmerDetail from '../pages/editOnboardedFarmer.jsx';
 
 import DynamicRoutePage from '../pages/dynamic-route.jsx';
 import RequestAndLoad from '../pages/request-and-load.jsx';
@@ -71,6 +73,14 @@ var routes = [
   {
     path: '/onboardedFarmers/',
     component: OnboardedFarmers,
+  },
+  {
+    path: '/onboardedFarmer/:id/:phone',
+    component: OnboardedFarmerDetail,
+  },
+  {
+    path: '/editOnboardedFarmerDetail/:id/:phone',
+    component: EditOnboardedFarmerDetail,
   },
   {
     path: '/reviewFarmerConnection/',
