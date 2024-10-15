@@ -6,6 +6,7 @@ const FarmerDetailCard = ({ farmerData, f7router }) => {
     const {
       firstname, 
       lastname, 
+      age,
       gender, 
       mobilenumber, 
       community, 
@@ -36,6 +37,10 @@ const FarmerDetailCard = ({ farmerData, f7router }) => {
             <div className="flex justify-between items-center h-[1.2em]">
               <p>Gender:</p>
               <p>{gender}</p>
+            </div>
+            <div className="flex justify-between items-center h-[1.2em]">
+              <p>Birth Year</p>
+              <p>{new Date().getFullYear() - age}</p>
             </div>
             <div className="flex justify-between items-center h-[1.2em]">
               <p>Network:</p>
