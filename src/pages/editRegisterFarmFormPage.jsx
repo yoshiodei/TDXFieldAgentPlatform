@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Page } from 'framework7-react';
+import { Page, f7 } from 'framework7-react';
 import { FaChevronLeft } from "react-icons/fa6"
 import FarmDataForm from '../components/farmDataForm';
 import { FaUser } from "react-icons/fa";
 import PageTitle from '../components/pageTitle';
-import { f7 } from 'framework7-react';
 import store from '../js/store';
 import ErrorMessage from '../components/errorMessage';
 import { colorCodes } from '../config';
@@ -19,7 +18,7 @@ const editRegisterFarmFormPage = ({ f7router }) => {
           yearOfEstablishment: '2024',
           typeOfLabour: ['family labour'],
           size: '',
-          commodity: 'white maize',
+          commodity: [],
           colorCode: 'none'
         }
     ];
@@ -30,37 +29,6 @@ const editRegisterFarmFormPage = ({ f7router }) => {
     useEffect(() => {
       setFarmData(store.state.farmData);
     }, [])
-    
-
-    const assignColorCodes = () => {
-      const commodityCount = {};
-      
-      farmData.forEach((farm, index) => {
-        if (commodityCount[farm.commodity]) {
-          commodityCount[farm.commodity].push(index);
-        } else {
-          commodityCount[farm.commodity] = [index];
-        }
-      });
-  
-      Object.keys(commodityCount).forEach((commodity) => {
-
-        if(commodityCount[commodity].length > 1){
-        commodityCount[commodity].forEach((farmIndex, i) => {
-          farmData[farmIndex].colorCode = colorCodes[i % colorCodes.length];
-        });
-        }
-
-        else {
-          commodityCount[commodity].forEach((farmIndex) => {
-            farmData[farmIndex].colorCode = 'none';
-          });
-        }
-
-      });
-  
-      setFarmData([...farmData]);
-    };
 
     const handleAddFarm = (e) => {
       e.preventDefault();
@@ -72,27 +40,83 @@ const editRegisterFarmFormPage = ({ f7router }) => {
         yearOfEstablishment: '2024',
         typeOfLabour: ['family labour'],
         size: '',
-        commodity: 'white maize',
+        commodity: [],
         colorCode: 'none'
       };
 
       setFarmData([...farmData, newFarmData]);
     }
 
+    const assignColorCode = (data) => {
+      const commodityFrequency = {};
+      let occurrenceTracker = {};
+    
+      // Step 1: Count the frequency of each commodity across all farms
+      data.forEach(farm => {
+        farm.commodity.forEach(commodity => {
+          if (!commodityFrequency[commodity.id]) {
+            commodityFrequency[commodity.id] = 0;
+            occurrenceTracker[commodity.id] = 0; // Track occurrence for color code assignment
+          }
+          commodityFrequency[commodity.id] += 1;
+        });
+      });
+    
+      // Step 2: Assign color codes based on frequency
+      return data.map(farm => {
+        return {
+          ...farm,
+          commodity: farm.commodity.map(commodity => {
+            const frequency = commodityFrequency[commodity.id];
+            let colorCode = 'none';
+    
+            if (frequency > 1) {
+              const colorIndex = occurrenceTracker[commodity.id]; // Use occurrence tracker
+              colorCode = colorCodes[colorIndex] || 'none'; // Assign color based on occurrence
+              occurrenceTracker[commodity.id] += 1; // Update occurrence tracker
+            }
+    
+            return {
+              ...commodity,
+              colorCode
+            };
+          })
+        };
+      });
+    };
+
+    const hasUniqueNames = (data) => {
+      const nameSet = new Set();
+    
+      for (const item of data) {
+        if (nameSet.has(item.farmName)) {
+          return false; // Duplicate found
+        }
+        nameSet.add(item.name);
+      }
+    
+      return true;
+    };
+
     const handleSubmit = (event) => {
       event.preventDefault();
+      
+      const noDuplicateName = hasUniqueNames(farmData);
+
       const hasEmptyFields = farmData.some(
         (data) => (data.farmName.trim() === '' || data.yieldFromLastSeason.trim() === '' || data.size.trim() === '' || data.typeOfLabour.length === 0)
       );
 
+      if(!noDuplicateName){
+        f7.dialog.alert('Duplicate farm names found');
+      }
       if(hasEmptyFields){
         // setErrorMessage('Fields cannot be empty');
         f7.dialog.alert('Fields cannot be empty');
       }
       else {
-        // setErrorMessage('')
-        assignColorCodes();
-        store.dispatch('setFarmData', farmData)
+        const codes = assignColorCode(farmData);
+        store.dispatch('setFarmData', codes);
         f7router.navigate('/reviewRegistration/');
       }
     };

@@ -17,7 +17,7 @@ const editRegisterFarmerFormPage = ({f7router}) => {
   const initialState = {
     firstname: '',
     lastname: '',
-    dateofbirth: '',
+    age: '',
     community: '1, Samoa(Bongolo), Lambusie, Upper West',
     mobilenumber: '',
     gender: 'male',
@@ -72,9 +72,9 @@ const editRegisterFarmerFormPage = ({f7router}) => {
   } 
 
   const validateFarmerData = (farmerData) => {
-    const {firstname, lastname, mobilenumber, idcardtype, idcardnumber, dateofbirth } = farmerData;
+    const {firstname, lastname, mobilenumber, idcardtype, idcardnumber, age } = farmerData;
 
-    if( !firstname.trim() || !lastname.trim() || !mobilenumber.trim() || !dateofbirth){
+    if( !firstname.trim() || !lastname.trim() || !mobilenumber.trim() || !age){
       console.log('error: Fields cannot be empty');
       showToast('Form incomplete');
       return {
@@ -251,14 +251,15 @@ const editRegisterFarmerFormPage = ({f7router}) => {
                 </div>    
             </div>
             <div className="flex flex-col">
-                <label className="font-semibold">Date of Birth</label>
+                <label className="font-semibold">Age</label>
                 <div className="w-full rounded border border-slate-200 bg-white px-3 overflow-hidden">
                   <input
-                    name="dateofbirth"
-                    type="date"
-                    value={farmerData.dateofbirth}
+                    name="age"
+                    type="number"
+                    min={1}
+                    value={farmerData.age}
                     onChange={handleChangeForm}
-                    placeholder="Please select your date of birth"
+                    placeholder="Please enter age"
                     className="border border-slate-200 w-full h-[2.8em] px-3 rounded"
                   />
                 </div>

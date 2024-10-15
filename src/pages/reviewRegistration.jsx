@@ -36,6 +36,7 @@ const commodityPosition = (commodityName) => {
       fullname: `${farmerData.firstname} ${farmerData.lastname}`,
       mobilenumber: farmerData.mobilenumber,
       network: farmerData.network, 
+      age: farmerData.age,
       altmobilenumber: '',
       altnetwork: '',
       gender: farmerData.gender,
@@ -53,13 +54,12 @@ const commodityPosition = (commodityName) => {
         farmname: data.farmName,
         yield_from_last_season: data.yieldFromLastSeason,
         year_of_establishment: data.yearOfEstablishment,
-        commodity: commodityPosition(data.commodity),
+        commodity: data.commodity,
         farmsize: data.size,
         labour: data.typeOfLabour,
         community: data.location.split(', ')[0],
         holdingstock:"NO",
         stocksheld:{},
-        color: data.colorCode
       }
 
     }

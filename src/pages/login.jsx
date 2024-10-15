@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Page } from 'framework7-react'
+import { Page, f7 } from 'framework7-react'
 import TDXLogo from '../assets/tdx_logo.png'
-import { f7 } from 'framework7-react';
 
 const LoginPage = ({ f7router }) => {
   const [disableButton, setDisableButton] = useState(false);

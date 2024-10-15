@@ -121,6 +121,12 @@ export default function onboardedFarmersList({ f7router }) {
                   <div className="w-[60px] font-bold">Farms:</div>
                   <div>{farmer.farms.length}</div>
                 </div> 
+                <button
+                  className="mt-3 h-[2.3em] w-full bg-primary rounded flex justify-center items-center"
+                  onClick={() => f7router.navigate(`/onboardedFarmer/${farmer.token}/${farmer.paymentnumbers.main}`)}
+                >
+                  <h5 className="font-bold text-white">View Farmer</h5>
+                </button>
               </div>
             ))
           }    
