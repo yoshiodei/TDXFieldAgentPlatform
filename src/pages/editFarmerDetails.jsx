@@ -16,7 +16,7 @@ const EditRegisterFarmerFormPage = ({f7router}) => {
     name: '',
     gender: 'male',
     phone: '',
-    yearOfBirth: '2024',
+    age: '',
     yearsOfExperience: 'less than 5 years',
   }
   const [farmerData, setFarmerData] = useState(initialState);
@@ -133,19 +133,17 @@ const EditRegisterFarmerFormPage = ({f7router}) => {
                 </div>
             </div>
             <div className="flex flex-col">
-                <label className="font-semibold">Year of Birth</label>
-                <div className="w-full rounded border border-slate-200 overflow-hidden">
-                <select 
-                  name="yearOfBirth"
-                  value={farmerData.yearOfBirth}
-                  onChange={handleChangeForm}
-                  className="bg-white w-full h-[2.8em] px-3">
-                    {
-                    getYearArray().map((item) => (
-                        <option key={item} value={item}>{item}</option>
-                    ))
-                    }
-                </select> 
+                <label className="font-semibold">Age</label>
+                <div className="w-auto h-auto border border-slate-200 rounded px-3">
+                <input 
+                    name="age"
+                    value={farmerData.age}
+                    onChange={handleChangeForm}
+                    placeholder="Please enter age"
+                    min={1}
+                    type="number"
+                    className="w-full h-[2.8em]"
+                />
                 </div>
             </div>
             <div className="flex flex-col">
