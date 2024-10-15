@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { MdDelete } from "react-icons/md";
 import { commodityArray, regionsArray } from '../config';
 import { getYearArray } from '../config/utils';
+import { f7 } from 'framework7-react';
 import axios from 'axios';
 import store from '../js/store';
 
 export default function FarmDataForm({index, setFarmData, farmData, data}) {
   const [communities, setCommunities] = useState([]);
   const [typeOfLabour, setTypeOfLabour] = useState([]);
+  const [addedCommodities, setAddedCommodities] = useState([]);
+
+  console.log('see whats in there', farmData);
 
   const fetchCommunities = async () => {
     try {
@@ -48,6 +52,20 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
     setFarmData(newFarmData);
   }
 
+  // const commodityChange = (event) => {
+  //   const { value, checked } = event.target;
+  //   if (checked) {
+  //     const newFarmData = [...farmData];
+  //     newFarmData[index]['commodity'] = [ ...newFarmData[index]['commodity'], Number(value) ];
+  //     setFarmData(newFarmData);
+  //   } else {
+  //     const newFarmData = [...farmData];
+  //     const newLabourArray = newFarmData[index]['commodity'].filter(option => option !== Number(value));
+  //     newFarmData[index]['commodity'] = newLabourArray;
+  //     setFarmData(newFarmData);
+  //   }
+  // }
+
   const handleLabourChange = (event) => {
     const { name, checked } = event.target;
 
@@ -63,6 +81,25 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
       setFarmData(newFarmData);
     }
   };
+
+  const toggleCommodity = (event, commodityObj) => {
+    const { checked } = event.target;
+
+    if (checked) {
+      const newFarmData = [...farmData];
+      const newCommodityArray = [ ...newFarmData[index]['commodity'], commodityObj ]; 
+      newFarmData[index]['commodity'] = newCommodityArray;
+      setFarmData(newFarmData);
+      console.log('data =>>>', farmData);
+    } else {
+      const newFarmData = [...farmData];
+      const newFarmDataArray = newFarmData[index]['commodity'].filter(c => Number(c.id) !== Number(commodityObj.id));
+      newFarmData[index]['commodity'] = newFarmDataArray;
+      setFarmData(newFarmData);
+      console.log('data =>>>', farmData);
+    }
+  };
+
 
   return (
     <div className="flex flex-col gap-y-3">
@@ -158,22 +195,7 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
         </select> 
       </div>
       </div>
-      {/* <div className="flex flex-col">
-        <label className="font-semibold">Type Of Labour</label>
-        <div className="w-full rounded border border-slate-200 overflow-hidden">
-        <select
-          name="typeOfLabour"
-          value={data.typeOfLabour}
-          onChange={(e) => handleFarmFormChange(e, index)}
-          className="bg-white w-full h-[2.8em] px-3"
-        >
-          <option value="family labour">Family Labour</option>
-          <option value="hired labour">Hired Labour</option>
-          <option value="contract">Contract</option>
-        </select> 
-      </div>
-    </div> */}
-    <div className="flex flex-col">
+      <div className="flex flex-col">
         <label className="font-semibold">Type Of Labour</label>
         <div className="flex flex-col gap-y-4 pt-3 px-3">
          <div className="flex gap-x-3 items-center">
@@ -190,20 +212,26 @@ export default function FarmDataForm({index, setFarmData, farmData, data}) {
          </div>
        </div>
     </div>
-      <div className="flex flex-col">
+    <div className="flex flex-col">
         <label className="font-semibold">Commodity</label>
-        <div className="w-full rounded border border-slate-200 overflow-hidden">
-        <select
-          value={data.commodity}
-          name="commodity"
-          onChange={(e) => handleFarmFormChange(e, index)}
-          className="bg-white w-full h-[2.8em] px-3">
-          {commodityArray.map((item) => (
-              <option value={item.name.toLowerCase()} key={item.id}>{item.name}</option>
-            )
-          )}
-        </select> 
-      </div>
+        <div className="flex flex-col gap-y-4 pt-3 px-3">
+          { commodityArray.map((commodity) => (
+            <div key={commodity.name} className="flex gap-x-3 items-center">
+              <input
+                type="checkbox"
+                checked={data.commodity.some((c) => c?.id === commodity.id)}
+                onChange={(e) => toggleCommodity(e, { name: commodity.name, id: commodity.id })}
+              />
+              {/* <input
+                onChange={commodityChange}
+                checked={data.commodity.includes(Number(commodity.id))}
+                type="checkbox"
+                value={Number(commodity.id)}
+              /> */}
+              <h6 className="font-semibold">{commodity.name}</h6> 
+            </div>
+          )) }
+       </div>
     </div>
     </div>
   )

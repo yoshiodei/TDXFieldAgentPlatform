@@ -16,7 +16,7 @@ const FarmDetailCard = ({ farmData, f7router }) => {
         </button>  
       </div>
       <div className="w-full h-[1px] bg-slate-400 my-2" />
-      <div className="flex flex-col gap-y-5">
+      <div className="flex flex-col gap-y-14">
         {
           farmData.map((data, index) => (
             <FarmDataCard farmData={data} index={index} key={index} />
