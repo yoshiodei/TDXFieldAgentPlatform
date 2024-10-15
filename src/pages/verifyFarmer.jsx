@@ -83,7 +83,7 @@ const VerifyFarmerPage = ({f7router}) => {
                     onChange={(e) => setMobileNumber(e.target.value)}
                     placeholder="Please enter mobile number"
                     type="number"
-                    className="w-full h-[2.8em]"
+                    className="w-full h-[2.8em] bg-white"
                   />
                 </div>
             </div>
