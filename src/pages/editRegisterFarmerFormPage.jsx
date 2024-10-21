@@ -15,6 +15,7 @@ import { mobileNetworks, regionsArray } from '../config';
 
 const editRegisterFarmerFormPage = ({f7router}) => {
   const initialState = {
+    account_type: '',
     firstname: '',
     lastname: '',
     age: '',

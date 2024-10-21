@@ -13,8 +13,11 @@ import store from '../js/store';
 import useToast from '../components/toast';
 import { mobileNetworks, regionsArray } from '../config';
 
-const registerFarmerFormPage = ({f7router}) => {
+const registerFarmerFormPage = ({f7router, f7route}) => {
+  const {account} = f7route.params;
+
   const initialState = {
+    account_type: account,
     firstname: '',
     lastname: '',
     age: '',
@@ -160,7 +163,7 @@ const registerFarmerFormPage = ({f7router}) => {
       const {valid} = validateFarmerData(farmerData);
       const network = detectNetwork(farmerData.mobilenumber);
       
-      const newFarmerData = { ...farmerData, ...network }
+      const newFarmerData = { ...farmerData, ...network, account_type: account };
 
       if(valid){
         store.dispatch('setFarmer', newFarmerData);

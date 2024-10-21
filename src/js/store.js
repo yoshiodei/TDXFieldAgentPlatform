@@ -11,6 +11,7 @@ const initialState = {
 }
 
 const initialFarmerState = {
+  account_type: '',
   firstname: '',
   lastname: '',
   age: '',

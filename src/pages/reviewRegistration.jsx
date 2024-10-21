@@ -33,6 +33,7 @@ const commodityPosition = (commodityName) => {
 
   const getBioData = (farmerData, farmData) => {
     const biodata = {
+      account_type: farmerData.account_type,
       fullname: `${farmerData.firstname} ${farmerData.lastname}`,
       mobilenumber: farmerData.mobilenumber,
       network: farmerData.network, 
