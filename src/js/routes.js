@@ -20,6 +20,7 @@ import EditOnboardedFarmerDetail from '../pages/editOnboardedFarmer.jsx';
 import DynamicRoutePage from '../pages/dynamic-route.jsx';
 import RequestAndLoad from '../pages/request-and-load.jsx';
 import NotFoundPage from '../pages/404.jsx';
+import TransactionDetailPage from '../pages/transactionDetail.jsx';
 
 var routes = [
   {
@@ -39,7 +40,7 @@ var routes = [
     component: WelcomePage,
   },
   {
-    path: '/registerFarmerForm/',
+    path: '/registerFarmerForm/:account',
     component: RegisterFarmerFormPage,
   },
   {
@@ -81,6 +82,10 @@ var routes = [
   {
     path: '/editOnboardedFarmerDetail/:id/:phone',
     component: EditOnboardedFarmerDetail,
+  },
+  {
+    path: '/transactionDetail/',
+    component: TransactionDetailPage,
   },
   {
     path: '/reviewFarmerConnection/',
