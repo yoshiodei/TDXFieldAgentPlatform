@@ -86,7 +86,7 @@ export default function editOnboardedFarmer({ f7route, f7router }) {
       const response = await axios.post(
         `https://torux.app/api/user/profileedit/${id}`,
         {
-          newFarmer,   
+          ...newFarmer
         }, // This is the request body, currently empty
         {
           headers: {
