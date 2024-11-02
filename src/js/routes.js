@@ -3,6 +3,8 @@ import HomePage from '../pages/home.jsx';
 import LoginPage from '../pages/login.jsx';
 import verifyOTPPage from '../pages/verifyOTP.jsx';
 import WelcomePage from '../pages/welcome.jsx';
+import notificationsPage from '../pages/notifications.jsx';
+import NotificationDetail from '../pages/notificationDetail.jsx';
 import RegisterFarmerPage from '../pages/registerFarmer.jsx';
 import RegisterFarmerFormPage from '../pages/registerFarmerForm.jsx';
 import RegisterFarmFormPage from '../pages/registerFarmForm.jsx';
@@ -34,6 +36,14 @@ var routes = [
   {
     path: '/verifyOTP/:phoneNumber',
     component: verifyOTPPage,
+  },
+  {
+    path: '/notifications/',
+    component: notificationsPage,
+  },
+  {
+    path: '/notification/:id',
+    component: NotificationDetail,
   },
   {
     path: '/welcome/',
