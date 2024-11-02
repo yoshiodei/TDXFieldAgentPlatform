@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import { FaChevronRight } from "react-icons/fa6"
 import store from '../js/store'
 import FooterImg from '../assets/cultivating.png'
@@ -17,12 +18,17 @@ import {
   ListItem,
   Button
 } from 'framework7-react';
+import { registerPushNotifications, setupPushNotificationListeners } from '../config/utils';
 
  const HomePage = ({ f7router }) => {
   const handleNavigate = () => {
     f7router.navigate('/login/');
-    // f7router.navigate('/welcome/');
   }
+
+  useEffect(() => {
+    registerPushNotifications();
+    setupPushNotificationListeners();  
+  }, []);
 
   return (
   <Page name="home"> 

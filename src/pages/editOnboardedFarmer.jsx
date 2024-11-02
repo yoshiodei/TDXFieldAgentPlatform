@@ -12,6 +12,7 @@ export default function editOnboardedFarmer({ f7route, f7router }) {
     deviceId: '',
     first_name: '',
     last_name: '',
+    gender: 'male',
     date_birth: '',
     community_id: '',
     altrnumber: '',
@@ -144,6 +145,7 @@ export default function editOnboardedFarmer({ f7route, f7router }) {
         id_user: id,
         first_name: farmerDetail.first_name,
         last_name: farmerDetail.last_name,
+        gender: farmerDetail.gender,
         date_birth: farmerDetail.date_birth || '',
         community_id: farmerDetail.community_id  || '',
         altrnumber: farmerDetail.altrnumber  || '',
@@ -205,19 +207,20 @@ export default function editOnboardedFarmer({ f7route, f7router }) {
                 />
               </div>
 
-              {/* <div className="flex flex-col">
+              <div className="flex flex-col">
                 <label className="font-semibold">Gender</label>
                 <div className="w-full rounded border border-slate-200 overflow-hidden">
-                <select 
-                  name="gender"
-                  value={farmerDetail.gender}
-                  onChange={handleChangeForm}
-                  className="bg-white w-full h-[2.8em] px-3">
+                  <select 
+                    name="gender"
+                    value={farmerDetail.gender}
+                    onChange={handleChangeForm}
+                    className="bg-white w-full h-[2.8em] px-3"
+                  >
                     <option value="male">Male</option>
                     <option value="female">Female</option>
-                </select>
+                  </select>
                 </div>    
-              </div> */}
+              </div>
 
               <div className="flex flex-col">
                 <label className="font-semibold">Age</label>

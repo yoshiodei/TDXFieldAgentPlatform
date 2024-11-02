@@ -4,6 +4,7 @@ import { FaChevronLeft } from "react-icons/fa6"
 import PageTitle from '../components/pageTitle'
 import store from '../js/store'
 import axios from 'axios'
+import { formatDate } from '../config/utils'
 
 export default function transactionDetail({ f7router }) {
   const [transaction, setTransaction] = useState({});
@@ -61,8 +62,20 @@ export default function transactionDetail({ f7router }) {
             <h4 className="text-lg font-bold text-slate-600">Recent Withdrawals</h4>
             <div className="w-full h-[1px] bg-slate-300 my-1" />
             <div className="flex flex-col gap-y-3">{
-              transaction?.last_10withdrawals.map((transaction,index) => (
-                <h6>{`Transaction ${index + 1}`}</h6>
+              transaction?.last_10withdrawals?.map((transaction, index) => (
+                <>
+                  <div className="" key={transaction.invoiceid}>
+                    <div className="flex mb-1">
+                      <h6 className="w-[90px] font-bold">Amount:</h6>
+                      <h6>{`Ghc ${transaction.amount}`}</h6>
+                    </div>
+                    <div className="flex">
+                      <h6 className="w-[90px] font-bold">Date:</h6>
+                      <h6>{formatDate(transaction.created_at)}</h6>
+                    </div>
+                  </div>
+                  { (index + 1) !== transaction?.last_10withdrawals?.length  && <div className="w-full h-[1px] bg-slate-200 my-1" />}
+                </>
               ))
             }</div>
           </div>)}
